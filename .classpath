@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="D:/Selenium/workspace/MailRuTest/lib/bsh-2.0b4.jar"/>
+	<classpathentry kind="lib" path="D:/Selenium/workspace/MailRuTest/lib/jcommander-1.48.jar"/>
+	<classpathentry kind="lib" path="D:/Selenium/workspace/MailRuTest/lib/selenium-java-2.49.1.jar"/>
+	<classpathentry kind="lib" path="D:/Selenium/workspace/MailRuTest/lib/selenium-server-standalone-2.49.1.jar"/>
+	<classpathentry kind="lib" path="D:/Selenium/workspace/MailRuTest/lib/testng-6.9.9.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
