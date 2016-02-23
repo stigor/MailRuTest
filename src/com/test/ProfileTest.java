@@ -21,7 +21,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterSuite;
 
-public class ProfileTestPositive {
+public class ProfileTest {
   
   public static WebDriver driver;
   
@@ -47,8 +47,8 @@ public class ProfileTestPositive {
   public Object[][] privateTestData() {
     return new Object[][] {
       // { TestNumber, First_name, Last_name, Sex, City }
-      new Object[] { "������", "��������", 1, "�����-���������" },
-      new Object[] { "��������", "�������", 2, "��������" },
+      new Object[] { "Максим", "Алексеев", 1, "Санкт-Петербург" },
+      new Object[] { "Василиса", "Пупкина", 2, "Трухильо" },
     };
   }
 
@@ -84,11 +84,7 @@ public class ProfileTestPositive {
     sexField.click();
     
     // Change City
-    WebElement cityField = driver.findElement(By.id("field_citySugg_SearchInput"));
-    cityField.clear();
-    cityField.sendKeys(city);
-    cityField.sendKeys(Keys.ARROW_DOWN);
-    cityField.sendKeys(Keys.ENTER);
+    StaticCommonMethods.tapSuggestionCity(driver, city);
     
     // Press Save button
     WebElement saveProfileButton = driver.findElement(By.id("hook_FormButton_button_savePopLayerEditUserProfileNew"));
@@ -107,17 +103,17 @@ public class ProfileTestPositive {
     
     // Check data saved
     Logger.toLog("Check data was saved");
-    WebElement privateData = driver.findElement(By.cssSelector(".user-settings_i_tx,.textWrap"));
+    WebElement privateData = driver.findElement(By.cssSelector("div.user-settings_i_tx.textWrap"));
     String privateDataContent = privateData.getText();
     AssertJUnit.assertTrue("First name not found", privateDataContent.contains(firstName));
     AssertJUnit.assertTrue("Last name not found", privateDataContent.contains(lastName));
     if ( sex == 2 )
     {
-      AssertJUnit.assertTrue("Incorrect sex", privateDataContent.contains("��������"));
+      AssertJUnit.assertTrue("Incorrect sex", privateDataContent.contains("родилась"));
     }
     else
     {
-      AssertJUnit.assertTrue("Incorrect sex", privateDataContent.contains("�������"));
+      AssertJUnit.assertTrue("Incorrect sex", privateDataContent.contains("родился"));
     }
     AssertJUnit.assertTrue("City not found", privateDataContent.contains(city));
   }
@@ -142,17 +138,55 @@ public class ProfileTestPositive {
     // TODO: Also need to check sex and city
     
     // Discard changes
-    // TODO: Also need to check by "X" button
     WebElement cancelButton = driver.findElement(By.cssSelector(".lp"));
     cancelButton.click();
     (new WebDriverWait(driver, 10)).until(ExpectedConditions.invisibilityOfElementLocated(By.id("popLayerBodyWrapper")));
+    // TODO: Also need to check by "X" button
     
     // Check
     Logger.toLog("Check data wasn't saved");
-    WebElement privateData = driver.findElement(By.cssSelector(".user-settings_i_tx,.textWrap"));
+    WebElement privateData = driver.findElement(By.cssSelector("div.user-settings_i_tx.textWrap"));
     String privateDataContent = privateData.getText();
     AssertJUnit.assertTrue("First name was changed", privateDataContent.contains(firstName));
     AssertJUnit.assertTrue("Last name was changed", privateDataContent.contains(lastName));    
+  }
+  
+  @DataProvider
+  public Object[][] incorrectFirstNameTestData() {
+    return new Object[][] {
+      // { Incorrect_First_Name }
+      new Object[] { "", "Пожалуйста, укажите ваше имя." },
+      new Object[] { "\"", "Пожалуйста, используйте только буквы." },
+      new Object[] { "'", "Пожалуйста, используйте только буквы." },
+    };
+  }
+  
+  @Test(dataProvider = "incorrectFirstNameTestData")
+  public void testIncorrectFirstName( String incorrectFirstName, String errorMessage ) {
+    // Tap edit on private data
+    StaticCommonMethods.tapEditPrivateButton(driver);
+    
+    // Get First Name
+    WebElement firstNameField = driver.findElement(By.id("field_name"));
+    firstNameField.clear();
+    firstNameField.sendKeys( incorrectFirstName );
+
+    // Change City
+    StaticCommonMethods.tapSuggestionCity(driver, "Санкт-Петербург");
+    
+    // Press Save button
+    WebElement saveProfileButton = driver.findElement(By.id("hook_FormButton_button_savePopLayerEditUserProfileNew"));
+    saveProfileButton.click();
+    
+    // Check
+    Logger.toLog("Check error message appear");
+    WebElement firstNameErrorMessage = driver.findElement(By.xpath("//span[contains(text(),'"+errorMessage+"')]"));
+    AssertJUnit.assertTrue("Error message isn't displayed", firstNameErrorMessage.isDisplayed());
+    
+    // Close window
+    WebElement cancelButton = driver.findElement(By.cssSelector(".lp"));
+    cancelButton.click();
+    (new WebDriverWait(driver, 10)).until(ExpectedConditions.invisibilityOfElementLocated(By.id("popLayerBodyWrapper")));
   }
   
   @AfterSuite
