@@ -14,7 +14,6 @@ import org.testng.annotations.BeforeSuite;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -27,8 +26,7 @@ public class ProfileTest {
   
   @BeforeSuite
   @Parameters( { "login", "password", "baseUrl", "webdriver" } )
-  public void beforeSuite(String login, String password, String baseUrl, String webDriver) {    
-
+  public void beforeSuite(String login, String password, String baseUrl, String webDriver) {
     // Setup driver
     driver = MyWebDriver.SelectDriver(webDriver);
     driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
@@ -57,6 +55,8 @@ public class ProfileTest {
                                               String lastName, 
                                               Integer sex, 
                                               String city) {
+    
+    Logger.toLog("testProfileFirstLastNameSexCity");
     
     // Tap edit on private data
     StaticCommonMethods.tapEditPrivateButton(driver);
@@ -120,6 +120,8 @@ public class ProfileTest {
 
   @Test(groups = { "profile" })
   public void testDiscardChanges() {
+    Logger.toLog("testDiscardChanges");
+    
     // Tap edit on private data
     StaticCommonMethods.tapEditPrivateButton(driver);
     
@@ -163,6 +165,8 @@ public class ProfileTest {
   
   @Test(dataProvider = "incorrectFirstNameTestData")
   public void testIncorrectFirstName( String incorrectFirstName, String errorMessage ) {
+    Logger.toLog("testIncorrectFirstName");
+    
     // Tap edit on private data
     StaticCommonMethods.tapEditPrivateButton(driver);
     
@@ -170,7 +174,7 @@ public class ProfileTest {
     WebElement firstNameField = driver.findElement(By.id("field_name"));
     firstNameField.clear();
     firstNameField.sendKeys( incorrectFirstName );
-
+    
     // Change City
     StaticCommonMethods.tapSuggestionCity(driver, "Санкт-Петербург");
     
