@@ -3,8 +3,8 @@
 
 <suite name="ProfileSuite" parallel="false">
 
-  <parameter name="login" value="79219269862"/>
-  <parameter name="password" value="e2igah36"/>
+  <parameter name="login" value="SET_LOGIN"/>
+  <parameter name="password" value="SET_PASSWORD"/>
   <parameter name="baseUrl" value="http://ok.ru"/>
   <parameter name="webdriver" value="chrome"/>
   
