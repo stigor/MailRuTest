@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+
+<suite name="ProfileSuite" verbose="1">
+
+  <parameter name="login" value="set_login"/>
+  <parameter name="password" value="set_password"/>
+  <parameter name="baseUrl" value="http://ok.ru"/>
+  <parameter name="webdriver" value="chrome"/>
+  
+  <test name="ProfileTestPositive">
+    <classes>
+      <class name="com.test.ProfileTestPositive"/>
+    </classes>
+  </test>
+  
+  <test name="ProfileTestNegative">
+    <classes>
+      <class name="com.test.ProfileTestNegative"/>
+    </classes>
+  </test>
+  
+</suite>
